@@ -1,0 +1,10 @@
+
+DROP DATABASE IF EXISTS notesdb;
+DROP USER IF EXISTS 'user1'@'%';
+
+CREATE DATABASE IF NOT EXISTS notesdb CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER IF NOT EXISTS 'user1'@'%' IDENTIFIED WITH mysql_native_password BY 'qwerty';
+
+-- GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, REFERENCES ON `notesdb`.* TO 'user1'@'%';
+GRANT ALL ON `notesdb`.* TO 'user1'@'%';
+FLUSH PRIVILEGES;

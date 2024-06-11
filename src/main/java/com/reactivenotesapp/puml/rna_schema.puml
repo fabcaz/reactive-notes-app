@@ -1,0 +1,77 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+'object London
+
+'pk(id)
+map note_table {
+ id => UUID
+
+ name => varchar(50)
+ category_id => varchar(36)
+ url => varchar(255)
+ description => varchar(500)
+ content => varchar(500)
+}
+
+'pk(note_id, time)
+'index by note_id
+map timestamp_table{
+note_id => UUID
+time => TimeStamp
+content => varchar(255)
+}
+
+'term is natural key so single col table merged here
+'definition has same pk as here so merged
+'pk(note_id, term_id)
+'index by term lexical order
+map termdef_table{
+note_id => UUID
+term => varchar(36)
+definition => varchar(100)
+}
+
+'tag_name is natural key so single col tag_table merged here
+'pk(note_id, tag_name)
+map note_tag_table{
+note_id => UUID
+tag_name => varchar(36)
+}
+
+map category_table{
+name => varchar(36)
+}
+
+map tag_table{
+name => varchar(36)
+category_id => varchar(36)
+}
+
+'map category_tag_table{
+'category_id => varchar(36)
+'tag_id => varchar(36)
+'}
+
+note_tag_table::note_id -down-> note_table::id
+
+termdef_table::note_id -left-> note_table::id
+
+timestamp_table::note_id -up-> note_table::id
+
+note_tag_table -[hidden]-> termdef_table
+
+termdef_table -[hidden]-> timestamp_table
+
+
+note_tag_table::tag_name -> tag_table::name
+
+note_table::category_id -> category_table::name
+tag_table::category_id -> category_table::name
+
+'category_tag_table::tag_id -left-> tag_table::name
+'category_tag_table::category_id -> category_table::name
+
+'category_tag_table -[hidden]-> tag_table
+'category_tag_table -[hidden]-> category_table
+@enduml
